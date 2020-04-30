@@ -27,7 +27,7 @@ def convert(data, template, delimiter):
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
             # TODO: haven't found a way to write to a subfolder
-            docx.write("{counter}.docx")
+            docx.write(f"{counter}.docx")
 
 if __name__ == '__main__':
     # TODO: validate user input independent of the convert method
