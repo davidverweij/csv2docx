@@ -24,6 +24,8 @@ def convert(data, template, delimiter):
         print("All fields are present in your csv. Generating Word docs ...")
 
         for counter, row in enumerate(csvdict):
+            # Must create a new MailMerge for each file
+            docx = MailMerge(template)
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
             # TODO: haven't found a way to write to a subfolder
