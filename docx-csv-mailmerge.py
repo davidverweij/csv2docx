@@ -6,10 +6,9 @@ def convert(data, template, delimiter):
     print ("Getting .docx template and .csv data files ...")
 
     with open(data, 'rt') as csvfile:
-        csv_opened = csv.reader(csvfile, delimiter=delimiter)
-        csv_headers = next(csv_opened)
+        csvdict = csv.DictReader(csvfile, delimiter=delimiter)
+        csv_headers = csvdict.fieldnames
 
-        # ASSIGNING HERE TO: (i) OUTPUT TO USER; (ii) VALIDATE INPUT.
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
@@ -22,10 +21,8 @@ def convert(data, template, delimiter):
             print (f"{column_in_data} is in the word document, but not csv.")
             return
 
-    print("All merge fields are present in the .csv headers. Generating Word files now...")
-    # have to reopen, because the 'next'
-    with open(data, 'rt') as csvfile:
-        csvdict = csv.DictReader(csvfile, delimiter=delimiter)
+        print("All fields are present in your csv. Generating Word docs ...")
+
         for counter, row in enumerate(csvdict):
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
