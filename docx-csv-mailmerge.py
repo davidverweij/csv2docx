@@ -12,24 +12,24 @@ import csv
 
 if __name__ == '__main__':                      #code to execute if called from command-line
     try:
-        print "Getting .docx template and .csv data files ..."
+        print ("Getting .docx template and .csv data files ...")
         csvfile = open(sys.argv[1], 'rb')
         docx = MailMerge(sys.argv[2])
         delimiter = sys.argv[3]
         csvreader = csv.reader(csvfile, delimiter=delimiter)
 
     except IndexError:
-        print "Error: Insufficient arguments"
+        print ("Error: Insufficient arguments")
     except IOError:
-        print "Error: Files not found"
+        print ("Error: Files not found")
     except:
-        print "Error: Unexpected"
+        print ("Error: Unexpected")
         raise
     else:
         docx_mergefields = docx.get_merge_fields()
         csv_headers = csvreader.next()
-        print "Found these merge fields in the .docx : ", docx_mergefields
-        print "Found these header fields in the .csv : ", csv_headers
+        print ("Found these merge fields in the .docx : ", docx_mergefields)
+        print ("Found these header fields in the .csv : ", csv_headers)
 
         for field in docx_mergefields:                      # see if all fields are accounted for in the .csv header
             if field not in csv_headers:

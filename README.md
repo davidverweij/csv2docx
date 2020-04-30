@@ -1,10 +1,11 @@
 # docx-csv-mailmerge
 Generates .docx files from .csv files using a .docx template with mailmerge fields.
 
-## Required installed packages
-[docx-mailmerge](https://pypi.org/project/docx-mailmerge/)
+## Required
+- [docx-mailmerge](https://pypi.org/project/docx-mailmerge/)
+- Microsoft Office Word
 
-**NOTE** docx-mailmerge is based on [lxml](https://lxml.de/installation.html), which for MacOS users _like myself_ is currently only available through a MacPort (see also Bonus below). This then only allows the use of Python 2.7 - not 3. That is why this code is executed with Python 2.7. Running it on 3 will needs some tweaks (particularly on the print statements).
+**NOTE** docx-mailmerge is based on [lxml](https://lxml.de/installation.html), which for MacOS users _like myself_ is currently only available through a MacPort (see also Bonus below). This then only allows the use of Python 2.7 - not 3. That is why this code is executed with Python 2.7. I have yet to test it on a Windows Machine.
 
 ## Usage
 If you have the required package(s) installed (see above), put the docx-csv-mailmerge.py into the same folder as your .docx template and .csv data file. Then, run:
@@ -32,3 +33,9 @@ To try out this template, use - or add some lines to - the example_data.csv. The
 
 ## Bonus
 Use [docx2pdf](https://github.com/AlJohri/docx2pdf) to batch convert the generated .docx documents into .pdfs. Mac users need to use Python 2.7 and [MacPorts](https://www.macports.org/install.php) to install this package. In my experience, I had to run docx2pdf once, grant access to Microsoft Word, and could then run the whole batch nicely. I first moved all generated .docx to a folder to use the folder-batch from docx2pdf easily.
+
+I might turn this together into a bash script in the future.
+
+
+# TODO
+- Test on a Windows Machine
