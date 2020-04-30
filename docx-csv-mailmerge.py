@@ -1,14 +1,18 @@
 from mailmerge import MailMerge
 import sys
 import csv
+import click
 
-if __name__ == '__main__':                      #code to execute if called from command-line
+@click.command()
+@click.option('--template', "-t", "templatepath", required=True, help="Path to the .docx template file to be used")
+@click.option('--csv', '-c', 'csvpath', required=True, help="Path to the .csv data file to be used")
+@click.option('--delimiter', default=";", help='delimiter used in your csv. Default is \';\'')
+def generatedocx(templatepath, csvpath, delimiter):
     try:
         print ("Getting .docx template and .csv data files ...")
-        csvfile = open(sys.argv[1], 'rb')
-        docx = MailMerge(sys.argv[2])
-        delimiter = sys.argv[3]
-        csvreader = csv.reader(csvfile, delimiter=delimiter)
+        csvfile = open(csvpath, 'rb')
+        docx = MailMerge(templatepath)
+        csvreader = csv.reader(csvfile, delimiter=str(delimiter))
 
     except IndexError:
         print ("Error: Insufficient arguments")
@@ -32,7 +36,7 @@ if __name__ == '__main__':                      #code to execute if called from 
                 break
         else:                           # if all fields are accounted for
             print("All merge fields are present in the .csv headers. Generating Word files now...")
-            csvdict = csv.DictReader(open(sys.argv[1], 'rb'), delimiter=delimiter)                        # have to reopen, because the 'next'
+            csvdict = csv.DictReader(open(csvpath), delimiter=str(delimiter))                        # have to reopen, because the 'next'
 
             for counter, row in enumerate(csvdict):
                 single_document = {key : row[key] for key in docx_mergefields}       # dictionary comprehension to get mergefields from csv
@@ -48,3 +52,6 @@ if __name__ == '__main__':                      #code to execute if called from 
                     docx.write(str(counter) + ".docx")                               # TODO: haven't found a way to write to a subfolder
 
     print("Finished Program.")
+
+if __name__ == "__main__":
+    generatedocx()
