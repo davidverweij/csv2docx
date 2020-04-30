@@ -4,9 +4,8 @@ Generates .docx files from .csv files using a .docx template with mailmerge fiel
 
 ## Installing
 
-We use [poetry](https://python-poetry.org/) for dependency management and
-[pyenv](https://github.com/pyenv/pyenv) to manage python installations. Once
-they are installed, you can install the dependencies for this project as:
+[Poetry](https://python-poetry.org/) is used for dependency management and
+[pyenv](https://github.com/pyenv/pyenv) to manage python installations. Install dependencies via:
 
     poetry install
 
