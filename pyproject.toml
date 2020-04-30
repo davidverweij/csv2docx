@@ -9,7 +9,7 @@ homepage = "https://github.com/davidverweij/docx-csv-mailmerge"
 repository = "https://github.com/davidverweij/docx-csv-mailmerge"
 
 [tool.poetry.dependencies]
-python = "^2.7.0"
+python = "^3.8.0"
 docx-mailmerge = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
