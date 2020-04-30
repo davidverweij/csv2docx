@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 __author__ = "David Verweij"
-__license__ = "GPL"
+__license__ = "MIT"
 __version__ = "0.1"
 __email__ = "davidverweij@gmail.com"
 __status__ = "Work in Progress"
