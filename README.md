@@ -23,7 +23,7 @@ This demo uses 'Business Letter' template from Microsoft Office Word. In Word, o
 
 In my case, it showed `Error! No bookmark name given`. Right click on the text, "toggle field codes".
 
-![Insert Field, Mailmerge, Mergefield](images/1_add_field.png)
+![Rightcick, toggle field to show the fieldcode](images/2_toggle_field.png)
 
 You should see something like this `{ MERGEFIELD \* MERGEFORMAT}`. Add a name for this field, like so `{ MERGEFIELD DATE \* MERGEFORMAT}`. This name will have to correspond exactly (case sensitive) to the header in your .csv file. When you right click -- update field, the field should now display something like `<<DATE>>`. Make sure you update this field to the correct styling as you like. You can add more fields following the same approach, or copy paste this field and edit its name using the toggle-field trick.
 
