@@ -1,18 +1,28 @@
 # docx-csv-mailmerge
+
 Generates .docx files from .csv files using a .docx template with mailmerge fields.
 
-## Required
-- [docx-mailmerge](https://pypi.org/project/docx-mailmerge/)
-- Microsoft Office Word
+## Installing
 
-**NOTE** docx-mailmerge is based on [lxml](https://lxml.de/installation.html), which for MacOS users _like myself_ is currently only available through a [MacPorts](https://www.macports.org/install.php). This then only allows the use of Python 2.7 - not 3. That is why this code is executed with Python 2.7. I have yet to test it on a Windows Machine.
+We use [poetry](https://python-poetry.org/) for dependency management and
+[pyenv](https://github.com/pyenv/pyenv) to manage python installations. Once
+they are installed, you can install the dependencies for this project as:
+
+    poetry install
+
+To setup a virtual environment with your local pyenv version run:
+
+    poetry shell
 
 ## Usage
-If you have the required package(s) installed (see above), put the docx-csv-mailmerge.py into the same folder as your .docx template and .csv data file. Then, run:
+
+Move your `.docx` template and `.csv data file` into the folder of this repo and run:
 
     python docx-csv-mailmerge.py data.csv template.docx ";"
 
-where the first argument is the .csv file, the second the template, and the third the delimiter as used in the .csv between "quotation marks". You can also use absolute paths to the files, just make sure you add "" around these for escaping characters, for example:
+Where the arguments are your data to apply to the word template (in .`csv` format), your word template and the delimiter used in the `csv` file.
+
+You can also use absolute paths to the files, just make sure you add "" around these for escaping characters, for example:
 
     python docx-csv-mailmerge.py "path/to/data.csv" "path/to/template.docx" "/"
 
@@ -30,12 +40,3 @@ You should see something like this `{ MERGEFIELD \* MERGEFORMAT}`. Add a name fo
 To try out this template, use - or add some lines to - the example_data.csv. Then, run
 
      python docx-csv-mailmerge.py example_data.csv example_template.docx ";"
-
-## Bonus
-Use [docx2pdf](https://github.com/AlJohri/docx2pdf) to batch convert the generated .docx documents into .pdfs. In my experience, I had to run docx2pdf once, grant access to Microsoft Word, and could then run the whole batch nicely. I first moved all generated .docx to a folder to use the folder-batch from docx2pdf easily.
-
-I might turn this together into a bash script in the future.
-
-
-# TODO
-- Test on a Windows Machine
