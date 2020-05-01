@@ -1,7 +1,21 @@
 from mailmerge import MailMerge
+import click
 import csv
 import sys
 
+@click.command()
+@click.option(
+    '--data', '-c',
+    required=True,
+    help='Path to the .csv data file to be used')
+@click.option(
+    '--template', '-t',
+    required=True,
+    help='Path to the .docx template file to be used')
+@click.option(
+    '--delimiter', '-d',
+    default=";",
+    help='delimiter used in your csv. Default is \';\'')
 def convert(data, template, delimiter):
     print ("Getting .docx template and .csv data files ...")
 
@@ -28,12 +42,8 @@ def convert(data, template, delimiter):
             docx = MailMerge(template)
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
-            # TODO: haven't found a way to write to a subfolder
+            # TODO: write to user-defined subfolder
             docx.write(f"{counter}.docx")
 
 if __name__ == '__main__':
-    # TODO: validate user input independent of the convert method
-    # Showing how unpacking data works
-    _, data, template, delimiter = sys.argv
-    # Invoke our main function above (ideally via a CLI like click)
-    convert(data, template, delimiter)
+    convert()

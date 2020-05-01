@@ -15,15 +15,20 @@ To setup a virtual environment with your local pyenv version run:
 
 ## Usage
 
-Move your `.docx` template and `.csv data file` into the folder of this repo and run:
+Move your `.docx` template and `.csv data file` into the folder of this repo and run either of these:
 
-    python docx-csv-mailmerge.py data.csv template.docx ";"
+    python docx-csv-mailmerge.py -t example.docx -c example.csv
+    python docx-csv-mailmerge.py --template example.docx --data example.csv    # alternative
 
-Where the arguments are your data to apply to the word template (in .`csv` format), your word template and the delimiter used in the `csv` file.
+Where the arguments are your word template and the delimiter used in the `csv` file and your data to apply to the word template (in .`csv` format),
 
 You can also use absolute paths to the files, just make sure you add "" around these for escaping characters, for example:
 
-    python docx-csv-mailmerge.py "path/to/data.csv" "path/to/template.docx" "/"
+    python docx-csv-mailmerge.py --data "path/to/data.csv" --template "path/to/template.docx"
+
+If your .csv file uses a delimiter other than ";", use the `--delimiter` option. For help, run
+
+    python docx-csv-mailmerge.py --help
 
 ## Demo and preparing your files
 This demo uses 'Business Letter' template from Microsoft Office Word. In Word, open your desired document, and add mergefields in place where you like to fill the data programmatically. In the "Insert" ribbon, click on "[ ] Field" (likely next to text box or WordArt) and choose MailMerge --> MergeField.
