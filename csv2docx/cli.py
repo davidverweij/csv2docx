@@ -1,7 +1,6 @@
 from mailmerge import MailMerge
 import click
 import csv
-import sys
 import pathlib
 
 
@@ -31,13 +30,13 @@ def create_path_if_not_exists(path: str) -> pathlib.Path:
 @click.option(
     '--delimiter', '-d',
     default=";",
-    print ("Getting .docx template and .csv data files ...")
     help='Delimiter used in your csv. Default is \';\'')
 @click.option(
     '--path', '-p',
     default="output",
     help='The location to store the files.')
 def convert(data, template, delimiter, path):
+    print("Getting .docx template and .csv data files ...")
 
     with open(data, 'rt') as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
@@ -52,7 +51,7 @@ def convert(data, template, delimiter, path):
         # see if all fields are accounted for in the .csv header
         column_in_data = set(docx_mergefields) - set(csv_headers)
         if len(column_in_data) > 0:
-            print (f"{column_in_data} is in the word document, but not csv.")
+            print(f"{column_in_data} is in the word document, but not csv.")
             return
 
         print("All fields are present in your csv. Generating Word docs ...")
@@ -62,6 +61,6 @@ def convert(data, template, delimiter, path):
         for counter, row in enumerate(csvdict):
             # Must create a new MailMerge for each file
             docx = MailMerge(template)
-            single_document = {key : row[key] for key in docx_mergefields}
+            single_document = {key: row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
             docx.write(f"{path}/{counter}.docx")
