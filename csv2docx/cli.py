@@ -2,6 +2,22 @@ from mailmerge import MailMerge
 import click
 import csv
 import sys
+import pathlib
+
+
+def create_path_if_not_exists(path: str) -> pathlib.Path:
+    """Creates a path to store output data if it does not exists.
+
+    Args:
+        path: the path from user in any format (relative, absolute, etc.)
+    Returns:
+        A path to store output data.
+    """
+    path = pathlib.Path(path)
+    if not path.exists():
+        path.mkdir(parents=True, exist_ok=True)
+    return path
+
 
 @click.command()
 @click.option(
@@ -15,9 +31,13 @@ import sys
 @click.option(
     '--delimiter', '-d',
     default=";",
-    help='delimiter used in your csv. Default is \';\'')
-def convert(data, template, delimiter):
     print ("Getting .docx template and .csv data files ...")
+    help='Delimiter used in your csv. Default is \';\'')
+@click.option(
+    '--path', '-p',
+    default="output",
+    help='The location to store the files.')
+def convert(data, template, delimiter, path):
 
     with open(data, 'rt') as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
@@ -37,10 +57,11 @@ def convert(data, template, delimiter):
 
         print("All fields are present in your csv. Generating Word docs ...")
 
+        path = create_path_if_not_exists(path)
+
         for counter, row in enumerate(csvdict):
             # Must create a new MailMerge for each file
             docx = MailMerge(template)
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
-            # TODO: write to user-defined subfolder
-            docx.write(f"{counter}.docx")
+            docx.write(f"{path}/{counter}.docx")
