@@ -39,8 +39,4 @@ In my case, it showed `Error! No bookmark name given`. Right click on the text, 
 
 ![Rightcick, toggle field to show the fieldcode](images/2_toggle_field.png)
 
-You should see something like this `{ MERGEFIELD \* MERGEFORMAT}`. Add a name for this field, like so `{ MERGEFIELD DATE \* MERGEFORMAT}`. This name will have to correspond exactly (case sensitive) to the header in your .csv file. When you right click -- update field, the field should now display something like `<<DATE>>`. Make sure you update this field to the correct styling as you like. You can add more fields following the same approach, or copy paste this field and edit its name using the toggle-field trick.
-
-To try out this template, use - or add some lines to - the example_data.csv. Then, run
-
-     python docx-csv-mailmerge.py example_data.csv example_template.docx ";"
+You should see something like this `{ MERGEFIELD \* MERGEFORMAT}`. Add a name for this field, like so `{ MERGEFIELD DATE \* MERGEFORMAT}`. This name will have to correspond exactly (case sensitive) to the header in your .csv file. When you right click -- update field, the field should now display something like `<<DATE>>`. Make sure you update this field to the correct styling as you like. You can add more fields following the same approach, or copy paste this field and edit its name using the toggle-field trick. Run the code as indicated above.
