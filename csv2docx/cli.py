@@ -44,6 +44,3 @@ def convert(data, template, delimiter):
             docx.merge_templates([single_document], separator='page_break')
             # TODO: write to user-defined subfolder
             docx.write(f"{counter}.docx")
-
-if __name__ == '__main__':
-    convert()

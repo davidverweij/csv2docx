@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "docx-csv-mailmerge"
+name = "csv2docx"
 version = "0.0.1"
 description = "Generates .docx files from .csv files using a .docx template with mailmerge fields."
-authors = ["David Verweij <davidverweij@gmail.com>"]
+authors = ["David Verweij <davidverweij@gmail.com>", "Jay Rainey <hi@jawrainey.me>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/davidverweij/docx-csv-mailmerge"
-repository = "https://github.com/davidverweij/docx-csv-mailmerge"
+homepage = "https://github.com/davidverweij/csv2docx"
+repository = "https://github.com/davidverweij/csv2docx"
 
 [tool.poetry.dependencies]
 python = "^3.8.0"
@@ -16,7 +16,7 @@ click = "^7.1.2"
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
-my-script = "docx-csv-mailmerge"
+convert = "csv2docx.cli:convert"
 
 [build-system]
 requires = ["poetry>=0.12"]
