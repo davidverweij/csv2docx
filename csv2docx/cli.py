@@ -4,8 +4,10 @@ import csv
 import pathlib
 
 
-def create_path_if_not_exists(path: str) -> pathlib.Path:
+def absolute_path(path: str) -> pathlib.Path:
     """Creates a path to store output data if it does not exists.
+
+    This method will create the directory if non-existent.
 
     Args:
         path: the path from user in any format (relative, absolute, etc.)
@@ -32,10 +34,10 @@ def create_path_if_not_exists(path: str) -> pathlib.Path:
     default=";",
     help='Delimiter used in your csv. Default is \';\'')
 @click.option(
-    '--path', '-p',
+    '--destination', '-dest',
     default="output",
-    help='The location to store the files.')
-def convert(data, template, delimiter, path):
+    help='The destination to store the files.')
+def convert(data, template, delimiter, destination):
     print("Getting .docx template and .csv data files ...")
 
     with open(data, 'rt') as csvfile:
@@ -56,7 +58,7 @@ def convert(data, template, delimiter, path):
 
         print("All fields are present in your csv. Generating Word docs ...")
 
-        path = create_path_if_not_exists(path)
+        path = absolute_path(destination)
 
         for counter, row in enumerate(csvdict):
             # Must create a new MailMerge for each file
