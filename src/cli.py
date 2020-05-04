@@ -1,5 +1,5 @@
 import click
-import csv2docx.csv2docx as c2d
+from csv2docx import convert
 
 
 @click.command()
@@ -19,4 +19,4 @@ import csv2docx.csv2docx as c2d
     '--name', '-n',
     help='naming scheme for output files.')
 def main(data, template, delimiter, name):
-	c2d.convert(data, template, delimiter, name)
+	convert(data, template, delimiter, name)
