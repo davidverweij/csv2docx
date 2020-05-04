@@ -1,6 +1,6 @@
 import csv
 from mailmerge import MailMerge
-def convert(data, template, delimiter):
+def convert(data, template, delimiter=";"):
     print ("Getting .docx template and .csv data files ...")
 
     with open(data, 'rt') as csvfile:
