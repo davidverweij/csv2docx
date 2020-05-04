@@ -15,5 +15,8 @@ import csv2docx.csv2docx as c2d
     '--delimiter', '-d',
     default=";",
     help='delimiter used in your csv. Default is \';\'')
-def main(data, template, delimiter):
-	c2d.convert(data, template, delimiter)
+@click.option(
+    '--name', '-n',
+    help='naming scheme for output files.')
+def main(data, template, delimiter, name):
+	c2d.convert(data, template, delimiter, name)
