@@ -1,4 +1,4 @@
-# docx-csv-mailmerge
+# csv2docx
 
 Generates .docx files from .csv files using a .docx template with mailmerge fields.
 
@@ -12,8 +12,24 @@ Generates .docx files from .csv files using a .docx template with mailmerge fiel
 To setup a virtual environment with your local pyenv version run:
 
     poetry shell
-
+    
 ## Usage
+
+### Library
+
+To import and use the library in your code:
+
+```python
+from csv2docx.csv2docx import convert
+convert(template="tests/data/example.docx", data="tests/data/example.csv")
+```
+By default the delimiter is ";", but this can be changed to mirror your CSV file:
+
+```python
+convert(template="tests/data/example.docx", data="tests/data/example.csv", delimiter=",")
+```
+
+### CLI
 
 Move your `.docx` template and `.csv data file` into the folder of this repo and run either of these:
 
@@ -34,7 +50,7 @@ For help, run
 For a demo, run
 
     poetry run convert -t tests/data/example.docx -c tests/data/example.csv
-
+    
 ## Demo and preparing your files
 This demo uses 'Business Letter' template from Microsoft Office Word. In Word, open your desired document, and add mergefields in place where you like to fill the data programmatically. In the "Insert" ribbon, click on "[ ] Field" (likely next to text box or WordArt) and choose MailMerge --> MergeField.
 
