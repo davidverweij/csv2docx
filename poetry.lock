@@ -32,7 +32,7 @@ htmlsoup = ["beautifulsoup4"]
 source = ["Cython (>=0.29.7)"]
 
 [metadata]
-content-hash = "16d0223d7eef6ce44187c365a37c3ea8f7657d483ed0f00cc26b5a4f1d870c6d"
+content-hash = "ca521092cf6f5c7f89dd9b8c5a9fb3192470dbdfa378ba62547b0b073ca44334"
 python-versions = "^3.8.0"
 
 [metadata.files]
