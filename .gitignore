@@ -128,8 +128,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# All docx files output by script
+
+# output by script, except the example files
 *.docx
+!example.docx
+!example.csv
+
 
 # vim files
 *.swp
