@@ -1,5 +1,5 @@
 import click
-from csv2docx import convert
+from . import csv2docx
 
 
 @click.command()
@@ -24,4 +24,4 @@ from csv2docx import convert
     default="output",
     help='The location to store the files.')
 def main(data, template, delimiter, name, path):
-	convert(data, template, delimiter, name, path)
+	csv2docx.convert(data, template, delimiter, name, path)
