@@ -17,6 +17,11 @@ from csv2docx import convert
     help='delimiter used in your csv. Default is \';\'')
 @click.option(
     '--name', '-n',
+    required=True,
     help='naming scheme for output files.')
-def main(data, template, delimiter, name):
-	convert(data, template, delimiter, name)
+@click.option(
+    '--path', '-p',
+    default="output",
+    help='The location to store the files.')
+def main(data, template, delimiter, name, path):
+	convert(data, template, delimiter, name, path)

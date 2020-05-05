@@ -1,29 +1,44 @@
 import csv
 from mailmerge import MailMerge
+from pathlib import Path
 
-def generate_names(listnm):
-    newname = []
-    for i in range(len(listnm)):
-        if (listnm[i] not in listnm[:i]):
-            newname.append(listnm[i])
-        else:
-            newname.append(listnm[i] + "_" + str(listnm[:i].count(listnm[i]) + 1))
-    return newname
+def create_path_if_not_exists(path: str):
+    """Creates a path to store output data if it does not exists.
+    Args:
+        path: the path from user in any format (relative, absolute, etc.)
+    Returns:
+        A path to store output data.
+    """
+    path = Path(path)
+    if not path.exists():
+        path.mkdir(parents=True, exist_ok=True)
+    return path
 
-def convert(data, template, delimiter=";", custom_name="NULL"):
+def generate_name(filename, path):
+    """Checks whether file with same name exists or not
+    Args:
+        filename: the file we want to check
+        path: the directory we want to check in
+    Returns:
+        An unique full path with directory.
+    """
+    filename += ".docx"
+    checkpath = path / filename
+    if checkpath.exists():
+        # Count available files with same name
+        counter = len(list(path.glob(checkpath.stem + "*docx" ))) + 1
+        return f"{path}/{checkpath.stem}_{counter}.docx"
+    return checkpath
+
+def convert(data, template, delimiter=";", custom_name=None, path="output"):
     print ("Getting .docx template and .csv data files ...")
 
     with open(data, 'rt') as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
         csv_headers = csvdict.fieldnames
-        if (custom_name != None):
-            if (custom_name not in csv_headers):
+        if (custom_name != None and custom_name not in csv_headers):
                 print("Column name not found. Please enter valid column name")
                 exit()
-            else:
-                file_names = generate_names(list(row[custom_name] for row in csvdict))
-                csvfile.seek(1)
-                csvfile.readline()
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
@@ -37,13 +52,13 @@ def convert(data, template, delimiter=";", custom_name="NULL"):
             return
 
         print("All fields are present in your csv. Generating Word docs ...")
+        path = create_path_if_not_exists(path)
 
-
-        for counter, row in enumerate(csvdict):
+        for row in csvdict:
             # Must create a new MailMerge for each file
             docx = MailMerge(template)
             single_document = {key : row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
-            # TODO: write to user-defined subfolder
-
-            docx.write(f"{file_names[counter] if (custom_name != None) else counter+1}.docx")          
+            # Striping every name to remove extra spaces
+            filename = generate_name(row[custom_name].strip(), path)
+            docx.write(filename)
