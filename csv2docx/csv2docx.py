@@ -17,12 +17,12 @@ def create_output_folder(path: str) -> Path:
 
 
 def create_unique_name(filename: str, path: Path) -> Path:
-    """Checks whether file with same name exists or not
+    """Creates an unique filename for specified path.
     Args:
         filename: the name of file to create
         path: the path where the file is stored
     Returns:
-        An unique full path with directory.
+        An absolute path with directory.
     """
     filename = filename.strip() + ".docx"
     filepath = path / filename
@@ -62,6 +62,5 @@ def convert(data, template, name, path="output", delimiter=";"):
             docx = MailMerge(template)
             single_document = {key: row[key] for key in docx_mergefields}
             docx.merge_templates([single_document], separator='page_break')
-            # Striping every name to remove extra spaces
             filename = create_unique_name(row[name], path)
             docx.write(filename)

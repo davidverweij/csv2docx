@@ -23,5 +23,5 @@ from . import csv2docx
     '--path', '-p',
     default="output",
     help='The location to store the files.')
-def main(data, template, name, delimiter, path):
+def main(data, template, name, path, delimiter):
     csv2docx.convert(data, template, name, path, delimiter)
