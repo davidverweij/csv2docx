@@ -41,7 +41,7 @@ def convert(data, template, name, path="output", delimiter=";"):
         csv_headers = csvdict.fieldnames
         if (name not in csv_headers):
             print("Column name not found. Please enter valid column name")
-            exit()
+            exit(1)
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
