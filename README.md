@@ -21,12 +21,12 @@ To import and use the library in your code:
 
 ```python
 from csv2docx.csv2docx import convert
-convert(template="tests/data/example.docx", data="tests/data/example.csv")
+convert(template="tests/data/example.docx", data="tests/data/example.csv", name="NAME")
 ```
 By default the delimiter is ";", but this can be changed to mirror your CSV file:
 
 ```python
-convert(template="tests/data/example.docx", data="tests/data/example.csv", delimiter=",")
+convert(template="tests/data/example.docx", data="tests/data/example.csv", name="NAME", delimiter=",")
 ```
 
 ### CLI
