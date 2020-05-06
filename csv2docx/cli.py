@@ -14,14 +14,14 @@ from . import csv2docx
 @click.option(
     '--delimiter', '-d',
     default=";",
-    help='delimiter used in your csv. Default is \';\'')
+    help='Delimiter used in your csv. Default is \';\'')
 @click.option(
     '--name', '-n',
     required=True,
-    help='naming scheme for output files.')
+    help='Naming scheme for output files.')
 @click.option(
     '--path', '-p',
     default="output",
     help='The location to store the files.')
-def main(data, template, delimiter, name, path):
-	csv2docx.convert(data, template, delimiter, name, path)
+def main(data, template, name, delimiter, path):
+    csv2docx.convert(data, template, name, path, delimiter)
