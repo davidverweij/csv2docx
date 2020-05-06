@@ -1,5 +1,5 @@
 import click
-import csv2docx.csv2docx as c2d
+from . import csv2docx
 
 
 @click.command()
@@ -14,6 +14,14 @@ import csv2docx.csv2docx as c2d
 @click.option(
     '--delimiter', '-d',
     default=";",
-    help='delimiter used in your csv. Default is \';\'')
-def main(data, template, delimiter):
-	c2d.convert(data, template, delimiter)
+    help='Delimiter used in your csv. Default is \';\'')
+@click.option(
+    '--name', '-n',
+    required=True,
+    help='Specific column name to be used in the naming scheme for output files.')
+@click.option(
+    '--path', '-p',
+    default="output",
+    help='The location to store the files.')
+def main(data, template, name, path, delimiter):
+    csv2docx.convert(data, template, name, path, delimiter)

@@ -12,7 +12,7 @@ Generates .docx files from .csv files using a .docx template with mailmerge fiel
 To setup a virtual environment with your local pyenv version run:
 
     poetry shell
-    
+
 ## Usage
 
 ### Library
@@ -31,17 +31,21 @@ convert(template="tests/data/example.docx", data="tests/data/example.csv", delim
 
 ### CLI
 
-Move your `.docx` template and `.csv data file` into the folder of this repo and run either of these:
+Move your `.docx` template and `.csv data file` into the folder of this repo and run:
 
-    poetry run convert -t template.docx -c data.csv
-    poetry run convert -t template.docx -c data.csv -d ","  # indicate a delimiter if other than ";"
-    poetry run convert --template template.docx --data data.csv --delimiter ","  # long alternative
+    poetry run convert -t template.docx -c data.csv -n csv_column_name
 
-Where the arguments are your word template and the delimiter used in the `csv` file and your data to apply to the word template (in .`csv` format),
+Where the arguments are your Microsoft Word template, your data to apply to the word template (in .`csv` format) and the column name (case sensitive) to be used to name the resulting `.docx` files.
+
+Optional arguments allow you to indicate a delimiter other than `;` in your `csv` data file, and an ouput folder other than the default `output` in the current directory:
+
+    poetry run convert -t template.docx -c data.csv -n csv_column_name -d ","  # indicate a delimiter if other than ";"
+    poetry run convert -t template.docx -c data.csv -n csv_column_name -p output_folder  # indicate an output folder
+    poetry run convert --template template.docx --data data.csv --name csv_column_name --path output_folder --delimiter ","  # long alternative
 
 You can also use absolute paths to the files, just make sure you add "" around these for escaping characters, for example:
 
-    poetry run convert --data "path/to/data.csv" --template "path/to/template.docx"
+    poetry run convert --data "path/to/data.csv" --template "path/to/template.docx" --name csv_column_name
 
 For help, run
 
@@ -49,8 +53,8 @@ For help, run
 
 For a demo, run
 
-    poetry run convert -t tests/data/example.docx -c tests/data/example.csv
-    
+    poetry run convert -t tests/data/example.docx -c tests/data/example.csv -n NAME
+
 ## Demo and preparing your files
 This demo uses 'Business Letter' template from Microsoft Office Word. In Word, open your desired document, and add mergefields in place where you like to fill the data programmatically. In the "Insert" ribbon, click on "[ ] Field" (likely next to text box or WordArt) and choose MailMerge --> MergeField.
 
