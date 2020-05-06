@@ -18,7 +18,7 @@ from . import csv2docx
 @click.option(
     '--name', '-n',
     required=True,
-    help='Naming scheme for output files.')
+    help='Specific column name to be used in the naming scheme for output files.')
 @click.option(
     '--path', '-p',
     default="output",
