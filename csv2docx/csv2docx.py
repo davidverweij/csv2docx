@@ -1,6 +1,12 @@
+# standard libraries
 import csv
-from mailmerge import MailMerge
 from pathlib import Path
+
+# third-party packages
+from mailmerge import MailMerge
+
+# local packages
+# -- none
 
 
 def create_output_folder(path: str) -> Path:

@@ -1,4 +1,10 @@
+# standard libraries
+# -- none
+
+# third-party packages
 import click
+
+# local packages
 from . import csv2docx
 
 
