@@ -1,7 +1,12 @@
+from pathlib import Path
+
 import click.testing
 import pytest
 
 from csv2docx import cli
+
+
+default_outpath = Path.cwd() / "output"
 
 
 @pytest.fixture
@@ -9,6 +14,7 @@ def runner():
     return click.testing.CliRunner()
 
 
+# not using a tmp_path to test default output folder
 def test_basic_succeeds(runner):
     result = runner.invoke(
         cli.main,
@@ -22,6 +28,13 @@ def test_basic_succeeds(runner):
         ],
     )
     assert result.exit_code == 0
+
+    # remove standard output files
+    for f in default_outpath.glob("*.docx"):
+        try:
+            f.unlink()
+        except OSError as e:
+            print("Error: %s : %s" % (f, e.strerror))
 
 
 def test_custom_output_succeeds(runner, tmp_path, tmpdir):
@@ -76,7 +89,7 @@ def test_custom_output_succeeds(runner, tmp_path, tmpdir):
     assert result_dir.exit_code == 0
 
 
-def test_output_name_not_found(runner):
+def test_output_name_not_found(runner, tmp_path):
     result = runner.invoke(
         cli.main,
         [
@@ -86,12 +99,14 @@ def test_output_name_not_found(runner):
             "tests/data/example.csv",
             "--name",
             "WRONG_NAME",
+            "--path",
+            tmp_path,
         ],
     )
     assert result.exit_code == 1
 
 
-def test_csv_header_not_found(runner):
+def test_csv_header_not_found(runner, tmp_path):
     result = runner.invoke(
         cli.main,
         [
@@ -101,6 +116,8 @@ def test_csv_header_not_found(runner):
             "tests/data/example_missing_column.csv",
             "--name",
             "NAME",
+            "--path",
+            tmp_path,
         ],
     )
     assert result.exit_code == 0
