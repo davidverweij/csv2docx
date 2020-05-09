@@ -7,8 +7,11 @@ nox.options.sessions = "lint", "safety", "tests"
 locations = "csv2docx", "tests", "noxfile.py"
 
 
-# a wrapper for session.install to pin dependecies in testing
 def install_with_constraints(session, *args, **kwargs):
+    """A wrapper for session.install use linting and
+    test depenencies that are pinned. This ensure
+    replicatability amongst developers."""
+
     with tempfile.NamedTemporaryFile() as requirements:
         session.run(
             "poetry",
