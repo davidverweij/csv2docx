@@ -23,116 +23,73 @@ def cleanoutputdir():
     default_outpath.rmdir()
 
 
+@pytest.fixture
+def options(tmp_path):
+    return [
+        "--template",
+        "tests/data/example.docx",
+        "--data",
+        "tests/data/example.csv",
+        "--name",
+        "NAME",
+        "--path",
+        tmp_path,
+    ]
+
+
 @pytest.mark.usefixtures("cleanoutputdir")
-def test_basic_succeeds(runner):
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example.csv",
-            "--name",
-            "NAME",
-        ],
-    )
+def test_basic_succeeds(runner, options):
+
+    del options[-2:]
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
 
 
-def test_custom_output_path_succeeds(runner, tmp_path):
-
+def test_custom_output_path_succeeds(runner, options):
     """testing pathlib.Path object as output"""
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example.csv",
-            "--name",
-            "NAME",
-            "--path",
-            tmp_path,
-        ],
-    )
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
 
 
-def test_custom_deep_output_path_succeeds(runner, tmp_path):
-
+def test_custom_deep_output_path_succeeds(runner, options):
     """testing deep non-existent directory"""
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example.csv",
-            "--name",
-            "NAME",
-            "--path",
-            tmp_path / "deep" / "sub" / "folder",
-        ],
-    )
+
+    options[-1] = options[-1] / "deep" / "sub" / "folder"
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
 
 
-def test_custom_output_dir_succeeds(runner, tmpdir):
-
+def test_custom_output_dir_succeeds(runner, options, tmpdir):
     """testing py.path.local object as output
     the `tmpdir` provides a temporary directory unique to this test invocation"""
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example.csv",
-            "--name",
-            "NAME",
-            "--path",
-            tmpdir,
-        ],
-    )
+
+    options[-1] = tmpdir
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
 
 
-def test_output_name_not_found(runner, tmp_path):
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example.csv",
-            "--name",
-            "WRONG_NAME",
-            "--path",
-            tmp_path,
-        ],
-    )
+def test_output_name_not_found(runner, options):
+
+    options[5] = "WRONG_NAME"
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 1
 
 
-def test_csv_header_not_found(runner, tmp_path):
-    result = runner.invoke(
-        cli.main,
-        [
-            "--template",
-            "tests/data/example.docx",
-            "--data",
-            "tests/data/example_missing_column.csv",
-            "--name",
-            "NAME",
-            "--path",
-            tmp_path,
-        ],
-    )
+def test_csv_header_not_found(runner, options):
+
+    options[3] = "tests/data/example_missing_column.csv"
+
+    result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
 
