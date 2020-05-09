@@ -20,5 +20,5 @@ from . import csv2docx
     help="Column name to be used in the naming scheme for output files.",
 )
 @click.option("--path", "-p", default="output", help="The location to store the files.")
-def main(data, template, name, path, delimiter):
+def main(data: str, template: str, name: str, path: str, delimiter: str) -> None:
     csv2docx.convert(data, template, name, path, delimiter)
