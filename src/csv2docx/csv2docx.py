@@ -1,6 +1,7 @@
 import csv
-from mailmerge import MailMerge
 from pathlib import Path
+
+from mailmerge import MailMerge
 
 
 def create_output_folder(path: str) -> Path:
@@ -36,12 +37,12 @@ def create_unique_name(filename: str, path: Path) -> Path:
 def convert(data, template, name, path="output", delimiter=";"):
     print("Getting .docx template and .csv data files ...")
 
-    with open(data, 'rt') as csvfile:
+    with open(data, "rt") as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
         csv_headers = csvdict.fieldnames
-        if (name not in csv_headers):
+        if name not in csv_headers:
             print("Column name not found. Please enter valid column name")
-            exit()
+            exit(1)
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
@@ -61,6 +62,6 @@ def convert(data, template, name, path="output", delimiter=";"):
             # Must create a new MailMerge for each file
             docx = MailMerge(template)
             single_document = {key: row[key] for key in docx_mergefields}
-            docx.merge_templates([single_document], separator='page_break')
+            docx.merge_templates([single_document], separator="page_break")
             filename = create_unique_name(row[name], path)
             docx.write(filename)

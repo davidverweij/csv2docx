@@ -7,7 +7,7 @@ Generates .docx files from .csv files using a .docx template with mailmerge fiel
 [Poetry](https://python-poetry.org/) is used for dependency management and
 [pyenv](https://github.com/pyenv/pyenv) to manage python installations. Install dependencies via:
 
-    poetry install
+    poetry install --no-dev
 
 To setup a virtual environment with your local pyenv version run:
 
@@ -54,6 +54,30 @@ For help, run
 For a demo, run
 
     poetry run convert -t tests/data/example.docx -c tests/data/example.csv -n NAME
+
+
+
+## Contributing to code
+
+To contribute to this repository, first install all developer dependencies used (note the ommitted `--no-dev` from above) and set up `pre-commit` by running:
+
+    poetry install
+    poetry run pre-commit install
+
+Run linting and tests to see if all went well:
+
+    poetry run nox -r
+
+[Nox](https://nox.thea.codes/) is used for automation and standardisation of tests and linting. Any contribution **needs to pass these tests** before creating a Pull Request. The command above will check code formatting (using `flake8`), dependency safety and unit tests (using [`pytest`](https://docs.pytest.org/en/latest/) and [`coverage`](https://coverage.readthedocs.io/)). This doesn't include automatic code formatting, which is set up using [`black`](https://github.com/psf/black) to be run using:
+
+    poetry run nox -rs black
+
+With [`pre-commit`](https://pre-commit.com/) set up as above, any code committed will be run past a few tests, see the [`pre-commit` configuration file](.pre-commit-config.yaml). You can also run these test without a commit using:
+
+    poetry run pre-commit run --all-files
+
+### Pull requests
+When submitting a pull requests (e.g. using your fork of this repo), your code must be accompanied by corresponding tests by creating a new file (e.g. `test_new_function.py`) in [tests/data](tests/data). If tests are not present your code will not be merged.
 
 ## Demo and preparing your files
 This demo uses 'Business Letter' template from Microsoft Office Word. In Word, open your desired document, and add mergefields in place where you like to fill the data programmatically. In the "Insert" ribbon, click on "[ ] Field" (likely next to text box or WordArt) and choose MailMerge --> MergeField.
