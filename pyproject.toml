@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csv2docx"
-version = "0.0.1"
+version = "0.1.0"
 description = "Generates .docx files from .csv files using a .docx template with mailmerge fields."
 authors = ["David Verweij <davidverweij@gmail.com>", "Jay Rainey <hi@jawrainey.me>"]
 license = "MIT"
