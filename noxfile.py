@@ -1,11 +1,6 @@
-# standard libraries
 import tempfile
 
-# third-party packages
 import nox
-
-# local packages
-# -- none
 
 
 nox.options.sessions = "lint", "safety", "tests"
