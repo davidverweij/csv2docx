@@ -68,9 +68,7 @@ Run linting and tests to see if all went well:
 
     poetry run nox -r
 
-[Nox](https://nox.thea.codes/) is used for automation and standardisation of tests and linting. Any contribution **needs to pass these tests** before creating a Pull Request. The command above will check code formatting (using `flake8`), dependency safety and unit tests (using [`pytest`](https://docs.pytest.org/en/latest/) and [`coverage`](https://coverage.readthedocs.io/)). This doesn't include automatic code formatting, which is set up using [`black`](https://github.com/psf/black) to be run using:
-
-    poetry run nox -rs black
+[Nox](https://nox.thea.codes/) is used for automation and standardisation of tests, type hints, automatic code formatting, and linting. Any contribution **needs to pass these tests** before creating a Pull Request. The command above will check code formatting (using `flake8`), dependency safety and unit tests (using [`pytest`](https://docs.pytest.org/en/latest/) and [`coverage`](https://coverage.readthedocs.io/)).
 
 With [`pre-commit`](https://pre-commit.com/) set up as above, any code committed will be run past a few tests, see the [`pre-commit` configuration file](.pre-commit-config.yaml). You can also run these test without a commit using:
 
