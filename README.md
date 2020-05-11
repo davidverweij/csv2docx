@@ -77,8 +77,8 @@ poetry run pre-commit install
 
 Run linting and tests to see if all went well:
 
-```shell
-poetry run nox -r
+```sh
+$ poetry run nox -r
 ```
 
 [Nox](https://nox.thea.codes/) is used for automation and standardisation of tests, type hints, automatic code formatting, and linting. Any contribution **needs to pass these tests** before creating a Pull Request. The command above will check code formatting (using `flake8`), dependency safety and unit tests (using [`pytest`](https://docs.pytest.org/en/latest/) and [`coverage`](https://coverage.readthedocs.io/)).
@@ -90,7 +90,7 @@ poetry run pre-commit run --all-files
 ```
 
 ### Pull requests
-When submitting a pull requests (e.g. using your fork of this repo), your code must be accompanied by corresponding tests by creating a new file (e.g. `test_new_function.py`) in [tests/data](tests/data). If tests are not present your code will not be merged.
+When submitting a pull requests (e.g. using your fork of this repo), your code must be accompanied by corresponding tests by creating a new file (e.g. `test_new_function.py`) in [/tests/](/tests). If tests are not present your code will not be merged.
 
 ## Demo and preparing your files
 This demo uses 'Business Letter' template from Microsoft Office Word. In Word, open your desired document, and add mergefields in place where you like to fill the data programmatically. In the "Insert" ribbon, click on "[ ] Field" (likely next to text box or WordArt) and choose MailMerge --> MergeField.
