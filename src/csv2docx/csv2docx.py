@@ -37,14 +37,16 @@ def create_unique_name(filename: str, path: Path) -> Path:
 def convert(
     data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
 ) -> None:
-    print("Getting .docx template and .csv data files ...")
 
     with open(data, "rt") as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
         csv_headers = csvdict.fieldnames
+
         if csv_headers and name not in csv_headers:
-            print("Column name not found. Please enter valid column name")
-            exit(1)
+            raise ValueError(
+                f"The column {name} could not found to be used in the naming scheme."
+            )
+
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
@@ -54,16 +56,33 @@ def convert(
         # see if all fields are accounted for in the .csv header
         column_in_data = set(docx_mergefields) - set(csv_headers)
         if len(column_in_data) > 0:
-            print(f"{column_in_data} is in the word document, but not csv.")
-            return
+            raise KeyError(
+                f"{column_in_data} are mailmerge fields in the template, \
+                but missing in the csv."
+            )
 
-        print("All fields are present in your csv. Generating Word docs ...")
         output_path = create_output_folder(path)
 
         for row in csvdict:
-            # Must create a new MailMerge for each file
-            docx = MailMerge(template)
-            single_document = {key: row[key] for key in docx_mergefields}
-            docx.merge_templates([single_document], separator="page_break")
+            docx = generate_docx(
+                data=row, template=template, mergefields=docx_mergefields
+            )
             filename = create_unique_name(row[name], output_path)
             docx.write(filename)
+
+
+def generate_docx(data: dict, template: str, mergefields: set) -> MailMerge:
+    """Generates a single docx
+    Args:
+        data: a dictionary representing a single .csv row
+        template: the name of the template .docx
+        mergefields: a set of fields to be filled by the data
+    Returns:
+        A MailMerge (.docx) object with filled values
+    """
+
+    # Must create a new MailMerge for each file
+    docx = MailMerge(template)
+    fields = {key: data[key] for key in mergefields}
+    docx.merge_templates([fields], separator="page_break")
+    return docx
