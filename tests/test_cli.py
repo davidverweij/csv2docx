@@ -79,13 +79,24 @@ def test_custom_output_dir_succeeds(
     assert result.exit_code == 0
 
 
+def test_invalid_file(runner: CliRunner, options: List) -> None:
+
+    options[3] = "125123ssdfv9a98a7e43"
+
+    result = runner.invoke(cli.main, options)
+
+    assert result.exit_code == 0
+    assert "could not be opened or found." in result.output
+
+
 def test_output_name_not_found(runner: CliRunner, options: List) -> None:
 
     options[5] = "WRONG_NAME"
 
     result = runner.invoke(cli.main, options)
 
-    assert result.exit_code == 1
+    assert result.exit_code == 0
+    assert "could not found in the .csv header" in result.output
 
 
 def test_csv_header_not_found(runner: CliRunner, options: List) -> None:
@@ -95,3 +106,4 @@ def test_csv_header_not_found(runner: CliRunner, options: List) -> None:
     result = runner.invoke(cli.main, options)
 
     assert result.exit_code == 0
+    assert "missing in the csv" in result.output

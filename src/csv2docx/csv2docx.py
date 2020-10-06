@@ -34,43 +34,6 @@ def create_unique_name(filename: str, path: Path) -> Path:
     return filepath
 
 
-def convert(
-    data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
-) -> None:
-
-    with open(data, "rt") as csvfile:
-        csvdict = csv.DictReader(csvfile, delimiter=delimiter)
-        csv_headers = csvdict.fieldnames
-
-        if csv_headers and name not in csv_headers:
-            raise ValueError(
-                f"The column {name} could not found to be used in the naming scheme."
-            )
-
-        docx = MailMerge(template)
-        docx_mergefields = docx.get_merge_fields()
-
-        print(f"DOCX fields : {docx_mergefields}")
-        print(f"CSV field   : {csv_headers}")
-
-        # see if all fields are accounted for in the .csv header
-        column_in_data = set(docx_mergefields) - set(csv_headers)
-        if len(column_in_data) > 0:
-            raise KeyError(
-                f"{column_in_data} are mailmerge fields in the template, \
-                but missing in the csv."
-            )
-
-        output_path = create_output_folder(path)
-
-        for row in csvdict:
-            docx = generate_docx(
-                data=row, template=template, mergefields=docx_mergefields
-            )
-            filename = create_unique_name(row[name], output_path)
-            docx.write(filename)
-
-
 def generate_docx(data: dict, template: str, mergefields: set) -> MailMerge:
     """Generates a single docx
     Args:
@@ -86,3 +49,41 @@ def generate_docx(data: dict, template: str, mergefields: set) -> MailMerge:
     fields = {key: data[key] for key in mergefields}
     docx.merge_templates([fields], separator="page_break")
     return docx
+
+
+def convert(
+    data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
+) -> None:
+
+    with open(data, "rt") as csvfile:
+        csvdict = csv.DictReader(csvfile, delimiter=delimiter)
+        csv_headers = csvdict.fieldnames
+
+        if csv_headers and name not in csv_headers:
+            raise ValueError(
+                f"The column {name} could not found in the .csv header "
+                f"to be used in the naming scheme."
+            )
+
+        docx = MailMerge(template)
+        docx_mergefields = docx.get_merge_fields()
+
+        print(f"DOCX fields : {docx_mergefields}")
+        print(f"CSV field   : {csv_headers}")
+
+        # see if all fields are accounted for in the .csv header
+        column_in_data = set(docx_mergefields) - set(csv_headers)
+        if len(column_in_data) > 0:
+            raise KeyError(
+                f"{column_in_data} are mailmerge fields in the template, "
+                f"but missing in the csv."
+            )
+
+        output_path = create_output_folder(path)
+
+        for row in csvdict:
+            docx = generate_docx(
+                data=row, template=template, mergefields=docx_mergefields
+            )
+            filename = create_unique_name(row[name], output_path)
+            docx.write(filename)
