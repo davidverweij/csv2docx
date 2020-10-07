@@ -25,19 +25,12 @@ def mailmerge_docx() -> MailMerge:
     return MailMerge(Path.cwd() / "tests/data/example.docx")
 
 
-@pytest.mark.parametrize(
-    "data, template, name, path, delimiter",
-    [
-        ("tests/data/example.csv", "tests/data/example.docx", "NAME", "output", ";"),
-        (
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "NAME",
-            "nested/folder",
-            ";",
-        ),
-    ],
-)
+# gets all combinations of parametrized arguments
+@pytest.mark.parametrize("data", ["tests/data/example.csv"])
+@pytest.mark.parametrize("template", ["tests/data/example.docx"])
+@pytest.mark.parametrize("name", ["NAME"])
+@pytest.mark.parametrize("path", ["output", "nested/output"])
+@pytest.mark.parametrize("delimiter", [";"])
 def test_library_convert_success(
     data: str, template: str, name: str, path: str, delimiter: str, tmp_path: Path
 ) -> None:
