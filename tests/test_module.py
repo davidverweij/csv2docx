@@ -3,6 +3,7 @@ from typing import Generator
 
 from mailmerge import MailMerge
 import pytest
+from pytest_mock import MockerFixture
 
 from csv2docx import csv2docx
 
@@ -24,6 +25,28 @@ def mailmerge_docx() -> MailMerge:
     return MailMerge(Path.cwd() / "tests/data/example.docx")
 
 
+@pytest.mark.parametrize(
+    "data, template, name, path, delimiter",
+    [
+        ("tests/data/example.csv", "tests/data/example.docx", "NAME", "output", ";"),
+        (
+            "tests/data/example.csv",
+            "tests/data/example.docx",
+            "NAME",
+            "nested/folder",
+            ";",
+        ),
+    ],
+)
+def test_library_convert_success(
+    data: str, template: str, name: str, path: str, delimiter: str, tmp_path: Path
+) -> None:
+
+    result = csv2docx.convert(data, template, name, str(tmp_path / path), delimiter)
+
+    assert result
+
+
 def test_custom_output_path_succeeds(tmp_path: Path) -> None:
     """testing pathlib.Path object as output"""
 
@@ -42,3 +65,20 @@ def test_unique_naming(tmp_path: Path, mailmerge_docx: MailMerge) -> None:
     result = [f for f in Path(tmp_path).iterdir() if f.is_file()]
 
     assert len(result) == len(set(result))
+
+
+def test_empty_csv_rows(tmp_path: Path, mocker: MockerFixture) -> None:
+    """testing behaviour when .csv file has empty rows"""
+
+    mocker.patch.object(MailMerge, "write")
+
+    result = csv2docx.convert(
+        "tests/data/example_emptyrow.csv",
+        "tests/data/example.docx",
+        "NAME",
+        str(tmp_path),
+        ";",
+    )
+
+    assert result
+    MailMerge.write.not_called()

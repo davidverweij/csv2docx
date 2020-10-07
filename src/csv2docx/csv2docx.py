@@ -53,7 +53,7 @@ def generate_docx(data: dict, template: str, mergefields: set) -> MailMerge:
 
 def convert(
     data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
-) -> None:
+) -> bool:
 
     with open(data, "rt") as csvfile:
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
@@ -82,8 +82,12 @@ def convert(
         output_path = create_output_folder(path)
 
         for row in csvdict:
-            docx = generate_docx(
-                data=row, template=template, mergefields=docx_mergefields
-            )
-            filename = create_unique_name(row[name], output_path)
-            docx.write(filename)
+            # check if at least one key is a non-empty string
+            if any(row.values()):
+                docx = generate_docx(
+                    data=row, template=template, mergefields=docx_mergefields
+                )
+                filename = create_unique_name(row[name], output_path)
+                docx.write(filename)
+
+        return True

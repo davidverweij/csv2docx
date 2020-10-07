@@ -28,6 +28,7 @@ pre-commit = "^2.3.0"
 pytest = "^5.4.1"
 pytest-cov = "^2.8.1"
 safety = "^1.9.0"
+pytest-mock = "^3.3.1"
 
 [tool.poetry.scripts]
 convert = "csv2docx.cli:main"
@@ -42,6 +43,9 @@ source = ["csv2docx"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 100
+
+[pytest]
+mock_use_standalone_module = true
 
 [build-system]
 requires = ["poetry>=0.12"]
