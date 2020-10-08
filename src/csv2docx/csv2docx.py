@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+import warnings
 
 from mailmerge import MailMerge
 
@@ -11,7 +12,9 @@ def create_output_folder(output_path: str) -> Path:
     Returns:
         A path to store output data.
     """
-    path = Path(output_path)
+
+    # remove any leading slashes (else OSError (readonly))
+    path = Path(str(output_path).lstrip("/"))
     if not path.exists():
         path.mkdir(parents=True, exist_ok=True)
     return path
@@ -59,17 +62,24 @@ def convert(
         csvdict = csv.DictReader(csvfile, delimiter=delimiter)
         csv_headers = csvdict.fieldnames
 
-        if csv_headers and name not in csv_headers:
-            raise ValueError(
-                f"The column {name} could not found in the .csv header "
-                f"to be used in the naming scheme."
-            )
-
         docx = MailMerge(template)
         docx_mergefields = docx.get_merge_fields()
 
         print(f"DOCX fields : {docx_mergefields}")
         print(f"CSV field   : {csv_headers}")
+
+        if csv_headers and name not in csv_headers:
+            if len(csv_headers) == 1 and len(docx_mergefields) > 1:
+                warnings.warn(
+                    f"Only one .csv column could be found, but multiple"
+                    f" mergefields, potentially the .csv has a different"
+                    f" delimiter than '{delimiter}'",
+                    UserWarning,
+                )
+            raise ValueError(
+                f"The column {name} could not found in the .csv header "
+                f"to be used in the naming scheme."
+            )
 
         # see if all fields are accounted for in the .csv header
         column_in_data = set(docx_mergefields) - set(csv_headers)
