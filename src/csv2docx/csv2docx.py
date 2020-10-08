@@ -75,9 +75,6 @@ def convert(
 
             docx_mergefields = docx.get_merge_fields()
 
-            print(f"DOCX fields : {docx_mergefields}")
-            print(f"CSV field   : {csv_headers}")
-
             if csv_headers and name not in csv_headers:
                 if len(csv_headers) == 1 and len(docx_mergefields) > 1:
                     warnings.warn(
