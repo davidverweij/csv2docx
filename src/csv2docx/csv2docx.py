@@ -13,8 +13,7 @@ def create_output_folder(output_path: str) -> Path:
         A path to store output data.
     """
 
-    # remove any leading slashes (else OSError (readonly))
-    path = Path(str(output_path).lstrip("/"))
+    path = Path(output_path)
     if not path.exists():
         path.mkdir(parents=True, exist_ok=True)
     return path
@@ -86,7 +85,7 @@ def convert(
         if len(column_in_data) > 0:
             raise KeyError(
                 f"{column_in_data} are mailmerge fields in the template, "
-                f"but missing in the csv."
+                f"but missing in the .csv header"
             )
 
         output_path = create_output_folder(path)

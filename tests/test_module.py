@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Generator
+from typing import Callable, Dict, Generator
 
 from mailmerge import MailMerge
 import pytest
@@ -25,59 +25,79 @@ def mailmerge_docx() -> MailMerge:
     return MailMerge(Path.cwd() / "tests/data/example.docx")
 
 
-@pytest.mark.parametrize(
-    "data, template, name, path, delimiter",
-    [
-        pytest.param(
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "NAME",
-            "output",
-            ";",
-            id="standard",
-        ),
-        pytest.param(
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "NAME",
-            "nested/folder",
-            ";",
-            id="nested folder",
-        ),
-        pytest.param(
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "NAME",
-            "/output",
-            ";",
-            id="leading slash folder",
-        ),
-        pytest.param(
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "notNAME",
-            "output",
-            ";",
-            id="name not found",
-            marks=pytest.mark.xfail(raises=ValueError),
-        ),
-        pytest.param(
-            "tests/data/example.csv",
-            "tests/data/example.docx",
-            "NAME",
-            "output",
-            ",",
-            id="wrong delimiter",
-            marks=pytest.mark.xfail(raises=ValueError),  # and gives a UserWarning
-        ),
-    ],
-)
-def test_library_convert_success(
-    data: str, template: str, name: str, path: str, delimiter: str, tmp_path: Path
-) -> None:
+@pytest.fixture
+def options_gen(tmp_path: Path) -> Callable:
+    def _options_gen(**kwargs: str) -> Dict:
+        default = {
+            "template": "tests/data/example.docx",
+            "data": "tests/data/example.csv",
+            "name": "NAME",
+            "path": str(tmp_path.resolve()),
+            "delimiter": ";",
+        }
 
-    # prepend a temporary path to not affect the module folder
-    result = csv2docx.convert(data, template, name, str(tmp_path / path), delimiter)
+        # override values if provided
+        for key, value in kwargs.items():
+            if key in default:
+                default[key] = value
+
+        # convert dict to sequential list, add '--' for CLI options (i.e. the keys)
+        return default
+
+    return _options_gen
+
+
+# @pytest.mark.usefixtures("cleanoutputdir")
+# def test_library_convert(options_gen: Callable) -> None:
+#     t = options_gen(path="/output")
+#
+#     result = csv2docx.convert(
+#         t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+#     )
+#
+#     assert result
+
+
+def test_library_convert_output_dir(options_gen: Callable, tmpdir: Path) -> None:
+    """testing py.path.local object as output"""
+    t = options_gen(path=tmpdir)
+
+    result = csv2docx.convert(
+        t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+    )
+
+    assert result
+
+
+def test_library_convert_nested_output(options_gen: Callable, tmp_path: Path) -> None:
+    t = options_gen(path=tmp_path / "nested" / "output" / "folder")
+
+    result = csv2docx.convert(
+        t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+    )
+
+    assert result
+
+
+@pytest.mark.xfail(raises=ValueError)
+def test_library_convert_name_not_found(options_gen: Callable) -> None:
+    t = options_gen(name="notNAME")
+
+    result = csv2docx.convert(
+        t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+    )
+
+    assert result
+
+
+@pytest.mark.xfail(raises=ValueError)
+def test_library_convert_wrong_delimiter(options_gen: Callable) -> None:
+    t = options_gen(delimiter=",")
+
+    with pytest.warns(UserWarning):
+        result = csv2docx.convert(
+            t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+        )
 
     assert result
 
