@@ -79,6 +79,28 @@ def test_library_convert_nested_output(options_gen: Callable, tmp_path: Path) ->
     assert result
 
 
+@pytest.mark.xfail(raises=FileNotFoundError)
+def test_library_convert_template_wrong(options_gen: Callable) -> None:
+    t = options_gen(template="non-existing.docx")
+
+    result = csv2docx.convert(
+        t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+    )
+
+    assert result
+
+
+@pytest.mark.xfail(raises=FileNotFoundError)
+def test_library_convert_csv_wrong(options_gen: Callable) -> None:
+    t = options_gen(data="non-existing.csv")
+
+    result = csv2docx.convert(
+        t["data"], t["template"], t["name"], t["path"], t["delimiter"]
+    )
+
+    assert result
+
+
 @pytest.mark.xfail(raises=ValueError)
 def test_library_convert_name_not_found(options_gen: Callable) -> None:
     t = options_gen(name="notNAME")
