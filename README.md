@@ -30,6 +30,10 @@ By default the delimiter is ";", but this can be changed to mirror your CSV file
 csv2docx.convert(template="tests/data/example.docx", data="tests/data/example.csv", name="NAME", delimiter=",")
 ```
 
+#### Exceptions
+
+The `.convert()` methods returns `True` when successful, and throws a `KeyError` or `ValueError` if a (resolved) argument is found not to be valid.
+
 ### CLI
 
 ```shell
