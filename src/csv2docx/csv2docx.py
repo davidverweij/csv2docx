@@ -57,12 +57,8 @@ def convert(
     data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
 ) -> bool:
 
-    try:
-        csvfile = open(data, "rt")
-    except FileNotFoundError:
-        raise FileNotFoundError(f"The data .csv file '{data}' could not be found")
-    else:
-        with csvfile:
+    if Path(data).is_file():
+        with open(data, "rt") as csvfile:
             csvdict = csv.DictReader(csvfile, delimiter=delimiter)
             csv_headers = csvdict.fieldnames
 
@@ -108,3 +104,5 @@ def convert(
                     docx.write(filename)
 
             return True
+    else:
+        raise FileNotFoundError(f"The data .csv file '{data}' could not be found")

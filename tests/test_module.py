@@ -1,61 +1,11 @@
 from pathlib import Path
-from typing import Callable, Dict, Generator
+from typing import Callable
 
 from mailmerge import MailMerge
 import pytest
 from pytest_mock import MockerFixture
 
 from csv2docx import csv2docx
-
-
-@pytest.fixture
-def cleanoutputdir() -> Generator[None, None, None]:
-    default_outpath = Path.cwd() / "output"
-    yield
-    for f in default_outpath.glob("*"):
-        try:
-            f.unlink()
-        except OSError as e:
-            print(f"Error: {f} : {e.strerror}")
-    default_outpath.rmdir()
-
-
-@pytest.fixture
-def mailmerge_docx() -> MailMerge:
-    return MailMerge(Path.cwd() / "tests/data/example.docx")
-
-
-@pytest.fixture
-def options_gen(tmp_path: Path) -> Callable:
-    def _options_gen(**kwargs: str) -> Dict:
-        default = {
-            "template": "tests/data/example.docx",
-            "data": "tests/data/example.csv",
-            "name": "NAME",
-            "path": str(tmp_path.resolve()),
-            "delimiter": ";",
-        }
-
-        # override values if provided
-        for key, value in kwargs.items():
-            if key in default:
-                default[key] = value
-
-        # convert dict to sequential list, add '--' for CLI options (i.e. the keys)
-        return default
-
-    return _options_gen
-
-
-# @pytest.mark.usefixtures("cleanoutputdir")
-# def test_library_convert(options_gen: Callable) -> None:
-#     t = options_gen(path="/output")
-#
-#     result = csv2docx.convert(
-#         t["data"], t["template"], t["name"], t["path"], t["delimiter"]
-#     )
-#
-#     assert result
 
 
 def test_library_convert_output_dir(options_gen: Callable, tmpdir: Path) -> None:

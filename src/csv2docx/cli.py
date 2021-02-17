@@ -24,6 +24,6 @@ def main(data: str, template: str, name: str, path: str, delimiter: str) -> None
     try:
         csv2docx.convert(data, template, name, path, delimiter)
     except IOError:
-        click.echo(f"The file {path} could not be opened or found.")
+        raise click.ClickException(f"The file {path} could not be opened or found.")
     except (KeyError, ValueError) as err:
-        click.echo(err)
+        raise click.ClickException(str(err))
