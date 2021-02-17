@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+import warnings
 
 from mailmerge import MailMerge
 
@@ -11,6 +12,7 @@ def create_output_folder(output_path: str) -> Path:
     Returns:
         A path to store output data.
     """
+
     path = Path(output_path)
     if not path.exists():
         path.mkdir(parents=True, exist_ok=True)
@@ -34,36 +36,73 @@ def create_unique_name(filename: str, path: Path) -> Path:
     return filepath
 
 
+def generate_docx(data: dict, template: str, mergefields: set) -> MailMerge:
+    """Generates a single docx
+    Args:
+        data: a dictionary representing a single .csv row
+        template: the name of the template .docx
+        mergefields: a set of fields to be filled by the data
+    Returns:
+        A MailMerge (.docx) object with filled values
+    """
+
+    # Must create a new MailMerge for each file
+    docx = MailMerge(template)
+    fields = {key: data[key] for key in mergefields}
+    docx.merge_templates([fields], separator="page_break")
+    return docx
+
+
 def convert(
     data: str, template: str, name: str, path: str = "output", delimiter: str = ";"
-) -> None:
-    print("Getting .docx template and .csv data files ...")
+) -> bool:
 
-    with open(data, "rt") as csvfile:
-        csvdict = csv.DictReader(csvfile, delimiter=delimiter)
-        csv_headers = csvdict.fieldnames
-        if csv_headers and name not in csv_headers:
-            print("Column name not found. Please enter valid column name")
-            exit(1)
-        docx = MailMerge(template)
-        docx_mergefields = docx.get_merge_fields()
+    if Path(data).is_file():
+        with open(data, "rt") as csvfile:
+            csvdict = csv.DictReader(csvfile, delimiter=delimiter)
+            csv_headers = csvdict.fieldnames
 
-        print(f"DOCX fields : {docx_mergefields}")
-        print(f"CSV field   : {csv_headers}")
+            try:
+                docx = MailMerge(template)
+            except FileNotFoundError:
+                raise FileNotFoundError(
+                    f"The template .docx file '{template}' could not be found"
+                )
 
-        # see if all fields are accounted for in the .csv header
-        column_in_data = set(docx_mergefields) - set(csv_headers)
-        if len(column_in_data) > 0:
-            print(f"{column_in_data} is in the word document, but not csv.")
-            return
+            docx_mergefields = docx.get_merge_fields()
 
-        print("All fields are present in your csv. Generating Word docs ...")
-        output_path = create_output_folder(path)
+            if csv_headers and name not in csv_headers:
+                if len(csv_headers) == 1 and len(docx_mergefields) > 1:
+                    warnings.warn(
+                        f"Only one .csv column could be found, but multiple"
+                        f" mergefields, potentially the .csv has a different"
+                        f" delimiter than '{delimiter}'",
+                        UserWarning,
+                    )
+                raise ValueError(
+                    f"The column {name} could not found in the .csv header "
+                    f"to be used in the naming scheme."
+                )
 
-        for row in csvdict:
-            # Must create a new MailMerge for each file
-            docx = MailMerge(template)
-            single_document = {key: row[key] for key in docx_mergefields}
-            docx.merge_templates([single_document], separator="page_break")
-            filename = create_unique_name(row[name], output_path)
-            docx.write(filename)
+            # see if all fields are accounted for in the .csv header
+            column_in_data = set(docx_mergefields) - set(csv_headers)
+            if len(column_in_data) > 0:
+                raise KeyError(
+                    f"{column_in_data} are mailmerge fields in the template, "
+                    f"but missing in the .csv header"
+                )
+
+            output_path = create_output_folder(path)
+
+            for row in csvdict:
+                # check if at least one key is a non-empty string
+                if any(row.values()):
+                    docx = generate_docx(
+                        data=row, template=template, mergefields=docx_mergefields
+                    )
+                    filename = create_unique_name(row[name], output_path)
+                    docx.write(filename)
+
+            return True
+    else:
+        raise FileNotFoundError(f"The data .csv file '{data}' could not be found")

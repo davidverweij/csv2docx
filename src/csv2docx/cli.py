@@ -21,4 +21,9 @@ from . import csv2docx
 )
 @click.option("--path", "-p", default="output", help="The location to store the files.")
 def main(data: str, template: str, name: str, path: str, delimiter: str) -> None:
-    csv2docx.convert(data, template, name, path, delimiter)
+    try:
+        csv2docx.convert(data, template, name, path, delimiter)
+    except IOError:
+        raise click.ClickException(f"The file {path} could not be opened or found.")
+    except (KeyError, ValueError) as err:
+        raise click.ClickException(str(err))
