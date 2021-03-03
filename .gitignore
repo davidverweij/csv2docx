@@ -134,6 +134,8 @@ dmypy.json
 !example.docx
 !example.csv
 
+#logo development
+logo.ai
 
 # vim files
 *.swp
