@@ -463,17 +463,18 @@ pyflakes = ">=2.1.0,<2.2.0"
 
 [[package]]
 name = "flake8-aaa"
-version = "0.9.0"
-description = "A linter for Python tests"
+version = "0.17.0"
+description = "A Flake8 plugin that checks Python tests follow the Arrange-Act-Assert pattern"
 optional = false
-python-versions = ">=3.6, <4"
+python-versions = ">=3.8"
 files = [
-    {file = "flake8-aaa-0.9.0.tar.gz", hash = "sha256:f2f04d2640fcfbd109c06690ea3ae9b150dfdb04865bbb93812cf81968a36e5d"},
-    {file = "flake8_aaa-0.9.0-py3-none-any.whl", hash = "sha256:828436c9746f912e5351c13846fd56071d4114ec91d93455c1424397eb35a8b6"},
+    {file = "flake8-aaa-0.17.0.tar.gz", hash = "sha256:97dccdffa8e603dcf9cd9b4c2012e6fa22d58a2264a8b51146dcc9b63be66803"},
+    {file = "flake8_aaa-0.17.0-py3-none-any.whl", hash = "sha256:c9212d1fb94d1a95433c2ae18a644f96c33ee6ac059644d116e4dade0f191988"},
 ]
 
 [package.dependencies]
 asttokens = ">=2"
+flake8 = ">=3"
 
 [[package]]
 name = "flake8-bandit"
@@ -1307,4 +1308,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.0"
-content-hash = "d5051b62eb4482486ca5eb279da1f071c3faa90cc8e8bfc1a88d6174e6c4fff7"
+content-hash = "03a68e33de09f6eb462b1b26b18980246202e5e784e5cb53e87747d5242b172b"
