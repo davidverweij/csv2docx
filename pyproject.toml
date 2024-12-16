@@ -11,7 +11,7 @@ repository = "https://github.com/davidverweij/csv2docx"
 [tool.poetry.dependencies]
 python = "^3.8.0"
 docx-mailmerge = "^0.5.0"
-click = "^7.1.2"
+click = "^8.1.7"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
