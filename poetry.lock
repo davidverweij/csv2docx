@@ -935,13 +935,13 @@ dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "pre-commit"
-version = "2.3.0"
+version = "3.5.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 optional = false
-python-versions = ">=3.6.1"
+python-versions = ">=3.8"
 files = [
-    {file = "pre_commit-2.3.0-py2.py3-none-any.whl", hash = "sha256:979b53dab1af35063a483bfe13b0fcbbf1a2cf8c46b60e0a9a8d08e8269647a1"},
-    {file = "pre_commit-2.3.0.tar.gz", hash = "sha256:f3e85e68c6d1cbe7828d3471896f1b192cfcf1c4d83bf26e26beeb5941855257"},
+    {file = "pre_commit-3.5.0-py2.py3-none-any.whl", hash = "sha256:841dc9aef25daba9a0238cd27984041fa0467b4199fc4852e27950664919f660"},
+    {file = "pre_commit-3.5.0.tar.gz", hash = "sha256:5804465c675b659b0862f07907f96295d490822a450c4c40e747d0b1c6ebcb32"},
 ]
 
 [package.dependencies]
@@ -949,8 +949,7 @@ cfgv = ">=2.0.0"
 identify = ">=1.0.0"
 nodeenv = ">=0.11.1"
 pyyaml = ">=5.1"
-toml = "*"
-virtualenv = ">=15.2"
+virtualenv = ">=20.10.0"
 
 [[package]]
 name = "py"
@@ -1308,4 +1307,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.0"
-content-hash = "03a68e33de09f6eb462b1b26b18980246202e5e784e5cb53e87747d5242b172b"
+content-hash = "9cce5d02531966b43aa34cdca75ea5ab7c9f3a4fd9d0bcecccf74c67a347bc34"
